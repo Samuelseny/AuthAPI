@@ -171,11 +171,6 @@ class AuthService:
         token = self.generate_token(email, user[3])
         return {"token": token}
 
-    def recuperar_senha(self, document, email, new_password):
-        user = self.user_model.update_password(document, email, new_password)
-        token = self.generate_token(user[2], user[3])
-        return {"token": token}
-
     def logout(self, token):
         user = self.user_model.get_by_token(token)
         if not user:
@@ -232,12 +227,6 @@ def login(data: dict):
 
     return auth_service.login(data.get("login"), data.get("password"))
 
-
-@app.post("/api/v1/auth/reset-password")
-def reset_password(data: dict):
-    return auth_service.recuperar_senha(
-        data.get("document"), data.get("email"), data.get("new_password")
-    )
 
 @app.post("/api/v1/auth/request-password-reset")
 def request_password_reset(data: dict):
